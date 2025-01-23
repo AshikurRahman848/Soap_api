@@ -8,7 +8,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   Future<void> sendSoapRequest() async {
     var headers = {
@@ -32,6 +32,8 @@ class HomePage extends StatelessWidget {
       'Accept': '/', // Added Accept header
       'Connection': 'keep-alive' // Added Connection header
     };
+
+    debugPrint('Auth Request Headers: $headers');
 
     var request = http.Request(
       'POST',
@@ -59,12 +61,12 @@ class HomePage extends StatelessWidget {
 
       // Try to decode as UTF-8
       final responseBody = utf8.decode(bytes);
-      print('Response body length: ${responseBody.length}');
-      print('Raw response: "$responseBody"');
+      debugPrint('Response body length: ${responseBody.length}');
+      debugPrint('Raw response: "$responseBody"');
 
       if (streamedResponse.statusCode == 200) {
         if (responseBody.isEmpty) {
-          print('Response is empty despite 200 status');
+          debugPrint('Response is empty despite 200 status');
           return;
         }
 
@@ -77,20 +79,20 @@ class HomePage extends StatelessWidget {
               jsonStr = '[$jsonStr]';
             }
             final result = jsonStr;
-            print('Parsed JSON: $result');
+            debugPrint('Parsed JSON: $result');
           } catch (e) {
-            print('JSON parsing error: $e');
+            debugPrint('JSON parsing error: $e');
           }
         } else {
-          print('Response appears to be XML or other format');
+          debugPrint('Response appears to be XML or other format');
         }
       } else {
-        print('Error status: ${streamedResponse.statusCode}');
-        print('Response: $responseBody');
+        debugPrint('Error status: ${streamedResponse.statusCode}');
+        debugPrint('Response: $responseBody');
       }
     } catch (e, stackTrace) {
-      print('Exception: $e');
-      print('Stack trace: $stackTrace');
+      debugPrint('Exception: $e');
+      debugPrint('Stack trace: $stackTrace');
     }
   }
 
